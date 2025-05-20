@@ -24,6 +24,7 @@ class MonitorApp:
         self.moving_direction = None  # None, "up", "down", "left", "right"
         self.move_speed = 20          # Jarak per langkah (akan diatur sesuai PWM)
         self.move_interval = 100      # ms, interval update gerak (bisa juga diatur sesuai PWM)
+        self.move_job = None          # Untuk menyimpan after job
 
         # Buat style untuk 5 progress bar sensor
         self.pb_styles = []
@@ -34,11 +35,11 @@ class MonitorApp:
             style.configure(style_name, troughcolor="#D3D3D3", background="#D3D3D3")
             self.pb_styles.append(style_name)
 
-        # Inisialisasi koneksi serial ke COM5
+        # Inisialisasi koneksi serial ke COM4
         try:
-            self.serial_conn = serial.Serial('COM5', 115200, timeout=1)
+            self.serial_conn = serial.Serial('COM4', 115200, timeout=1)
         except serial.SerialException as e:
-            messagebox.showerror("Error", f"Tidak bisa membuka port COM5.\n{e}")
+            messagebox.showerror("Error", f"Tidak bisa membuka port COM4.\n{e}")
             self.serial_conn = None
 
         # Judul utama GUI
@@ -67,7 +68,7 @@ class MonitorApp:
 
     def __del__(self):
         # Tutup koneksi serial saat objek dihancurkan
-        if self.serial_conn and self.serial_conn.is_open:
+        if hasattr(self, 'serial_conn') and self.serial_conn and self.serial_conn.is_open:
             self.serial_conn.close()
 
     def create_left_side(self):
@@ -90,7 +91,7 @@ class MonitorApp:
                             command=lambda e=entry, l=label_text: self.submit(e, l))
             btn.grid(row=i, column=2, pady=8)
 
-        # =Kontrol arah robot (panah dan STOP)
+        # Kontrol arah robot (panah dan STOP)
         control_frame = tk.LabelFrame(self.left_frame, text="Kontrol Arah", 
                                       font=("Segoe UI", 14, "bold"), fg="#0078D7", bg="#E8EEF5", padx=15, pady=15)
         control_frame.pack(pady=20, fill="both", expand=True)
@@ -159,6 +160,8 @@ class MonitorApp:
         )
 
     def move_tracking_circle_continuous(self):
+        # Selalu update move_speed sesuai PWM terbaru
+        self.update_move_speed()
         if self.moving_direction == "up":
             self.move_tracking_circle(0, -self.move_speed)
         elif self.moving_direction == "down":
@@ -169,7 +172,9 @@ class MonitorApp:
             self.move_tracking_circle(self.move_speed, 0)
         # Lanjutkan jika masih bergerak
         if self.moving_direction:
-            self.root.after(self.move_interval, self.move_tracking_circle_continuous)
+            self.move_job = self.root.after(self.move_interval, self.move_tracking_circle_continuous)
+        else:
+            self.move_job = None
 
     def get_pwm_value(self):
         # Ambil nilai PWM dari entry "Motor Speed", default 150 jika kosong/tidak valid
@@ -240,37 +245,44 @@ class MonitorApp:
         self.send_motor_command(0, "S")
         self.status_var.set("Status: Diam")
         self.moving_direction = None  # Hentikan gerak lingkaran
+        if self.move_job:
+            self.root.after_cancel(self.move_job)
+            self.move_job = None
 
     def move_forward(self):
         pwm = self.get_pwm_value()
         self.send_motor_command(pwm, "F")
         self.status_var.set("Status: Maju")
-        self.update_move_speed()
         self.moving_direction = "up"
+        if self.move_job:
+            self.root.after_cancel(self.move_job)
         self.move_tracking_circle_continuous()
 
     def move_backward(self):
         pwm = self.get_pwm_value()
         self.send_motor_command(pwm, "B")
         self.status_var.set("Status: Mundur")
-        self.update_move_speed()
         self.moving_direction = "down"
+        if self.move_job:
+            self.root.after_cancel(self.move_job)
         self.move_tracking_circle_continuous()
 
     def turn_left(self):
         pwm = self.get_pwm_value()
         self.send_motor_command(pwm, "L")
         self.status_var.set("Status: Kiri")
-        self.update_move_speed()
         self.moving_direction = "left"
+        if self.move_job:
+            self.root.after_cancel(self.move_job)
         self.move_tracking_circle_continuous()
 
     def turn_right(self):
         pwm = self.get_pwm_value()
         self.send_motor_command(pwm, "R")
         self.status_var.set("Status: Kanan")
-        self.update_move_speed()
         self.moving_direction = "right"
+        if self.move_job:
+            self.root.after_cancel(self.move_job)
         self.move_tracking_circle_continuous()
 
     def submit(self, entry, label):
