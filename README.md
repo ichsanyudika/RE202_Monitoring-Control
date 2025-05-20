@@ -44,7 +44,12 @@ Proyek ini merupakan tugas dari mata kuliah RE-202 Pemrograman Berorientasi Obje
 
 ## 🧩 Struktur Proyek
 
-<pre> ```bash MonitoringControlGUI/ ├── main_gui.py # GUI aplikasi menggunakan Tkinter ├── arduino_code.ino # Program Arduino untuk kontrol motor, servo & sensor ├── README.md # Dokumentasi proyek ``` </pre>
+```
+MonitoringControlGUI/
+├── main_gui.py          # GUI aplikasi menggunakan Tkinter
+├── arduino_code.ino     # Program Arduino untuk kontrol motor, servo & sensor
+├── README.md            # Dokumentasi proyek
+```
 
 ## 🧑‍💻 Tim Pengembang
 
