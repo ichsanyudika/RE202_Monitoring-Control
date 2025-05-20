@@ -53,8 +53,6 @@ MonitoringControlGUI/
 
 ## 🧑‍💻 Tim Pengembang
 
-Nama Mahasiswa: [Nama Anda]
-
 Nama & Nim: 
 - Ichsan Fajar Yudika (4222401042)
 - Wildan Mahfudh Khoirul Murtadho (4222401046)
