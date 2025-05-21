@@ -51,6 +51,10 @@ MonitoringControlGUI/
 ├── README.md            # Dokumentasi proyek
 ```
 
+## Result
+
+![](asset/front-end-gui.png)  
+
 ## 🧑‍💻 Tim Pengembang
 
 - Ichsan Fajar Yudika (4222401042)
