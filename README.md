@@ -46,10 +46,11 @@ Proyek ini merupakan tugas dari mata kuliah RE-202 Pemrograman Berorientasi Obje
 
 ```
 MonitoringControlGUI/
-├── main_gui.py          # GUI aplikasi menggunakan Tkinter
-├── arduino_code.ino     # Program Arduino untuk kontrol motor, servo & sensor
-├── README.md            # Dokumentasi proyek
-```
+├── README.md                    # Dokumentasi proyek
+└── src/
+    ├── monitoring_robot.py      # Code GUI (Front-end)
+    └── monitoring/
+        └── monitoring.ino           # Code Arduino (Back-end)
 
 ## 🪟 Tampilan GUI
 
