@@ -53,6 +53,6 @@ Proyek ini merupakan tugas dari mata kuliah RE-202 Pemrograman Berorientasi Obje
 - M. Rasyid Prasetyo (4222411048)
 - Moh. Abdul Hikmal (4222401032)
 
-- Mata Kuliah: RE-202 Pemrograman Berorientasi Objek (OOP)
+💻 Mata Kuliah: RE-202 Pemrograman Berorientasi Objek (OOP)
 
 
