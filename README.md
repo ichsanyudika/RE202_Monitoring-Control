@@ -51,7 +51,7 @@ MonitoringControlGUI/
 ├── README.md            # Dokumentasi proyek
 ```
 
-## 📸 Hasil
+## 🪟 Tampilan GUI
 
 ![](asset/front-end-gui.png)  
 
