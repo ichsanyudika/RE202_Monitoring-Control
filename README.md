@@ -4,52 +4,47 @@ Proyek ini merupakan tugas dari mata kuliah RE-202 Pemrograman Berorientasi Obje
 
 ### 🛠️ Fitur Utama
 
-✅ Kontrol kecepatan motor dan sudut servo melalui GUI
+- Kontrol kecepatan motor dan sudut servo melalui GUI
 
-✅ Kendali arah robot (Maju, Mundur, Kiri, Kanan, Stop)
+- Kendali arah robot (Maju, Mundur, Kiri, Kanan, Stop)
 
-✅ Monitoring status 5 sensor garis secara real-time dengan indikator progress bar
+- Monitoring status 5 sensor garis secara real-time dengan indikator progress bar
 
-✅ Visualisasi tracking navigasi robot dalam bentuk animasi
+- Visualisasi tracking navigasi robot dalam bentuk animasi
 
-✅ Komunikasi dua arah antara Python dan Arduino via Serial (USB)
+- Komunikasi dua arah antara Python dan Arduino via Serial (USB)
 
 ## ⚙️ Komponen yang Digunakan
 
 ### Hardware
 
-✅ Arduino Uno / Nano
+- Arduino Uno / Nano
 
-✅ Motor DC (2x)
+- Motor DC (2x)
 
-✅ Driver Motor (L298N atau setara)
+- Driver Motor (L298N atau setara)
 
-✅ Servo SG90
+- Servo SG90
 
-✅ Sensor garis (5 channel)
+- Sensor garis (5 channel)
 
-✅ Kabel jumper & Breadboard
+- Kabel jumper & Breadboard
 
-✅ Power supply eksternal
+- Power supply eksternal
 
 ### Software:
 
-✅ Python 3.x
+- Python 3.x
 
-✅ Tkinter (GUI bawaan Python)
+- Tkinter (GUI bawaan Python)
 
-✅ PySerial (pip install pyserial)
+- PySerial (pip install pyserial)
 
-✅ Arduino IDE
+- Arduino IDE
 
-## 🧩 Struktur Proyek
+## 🪟 Tampilan GUI
 
-```
-MonitoringControlGUI/
-├── main_gui.py          # GUI aplikasi menggunakan Tkinter
-├── arduino_code.ino     # Program Arduino untuk kontrol motor, servo & sensor
-├── README.md            # Dokumentasi proyek
-```
+![](asset/front-end-gui.png)  
 
 ## 🧑‍💻 Tim Pengembang
 
@@ -58,4 +53,4 @@ MonitoringControlGUI/
 - M. Rasyid Prasetyo (4222411048)
 - Moh. Abdul Hikmal (4222401032)
 
-Mata Kuliah: RE-202 Pemrograman Berorientasi Objek (OOP)
+
