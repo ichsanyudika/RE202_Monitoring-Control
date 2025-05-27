@@ -25,6 +25,7 @@ class MonitorApp:
         self.move_speed = 20          # Jarak per langkah (akan diatur sesuai PWM)
         self.move_interval = 100      # ms, interval update gerak (bisa juga diatur sesuai PWM)
         self.move_job = None          # Untuk menyimpan after job
+        self.last_action = None       # Untuk menyimpan aksi terakhir (F/B/L/R)
 
         # Buat style untuk 5 progress bar sensor
         self.pb_styles = []
@@ -35,11 +36,11 @@ class MonitorApp:
             style.configure(style_name, troughcolor="#D3D3D3", background="#D3D3D3")
             self.pb_styles.append(style_name)
 
-        # Inisialisasi koneksi serial ke COM4
+        # Inisialisasi koneksi serial ke COM5
         try:
-            self.serial_conn = serial.Serial('COM4', 115200, timeout=1)
+            self.serial_conn = serial.Serial('COM5', 115200, timeout=1)
         except serial.SerialException as e:
-            messagebox.showerror("Error", f"Tidak bisa membuka port COM4.\n{e}")
+            messagebox.showerror("Error", f"Tidak bisa membuka port COM5.\n{e}")
             self.serial_conn = None
 
         # Judul utama GUI
@@ -84,6 +85,10 @@ class MonitorApp:
             entry = tk.Entry(input_frame, font=("Segoe UI", 12), width=12, relief="groove", bd=2)
             entry.grid(row=i, column=1, pady=8, padx=(0,10))
             self.entries.append(entry)
+
+            # Tambahkan event Enter pada entry PWM agar update kecepatan saat sedang berjalan
+            if label_text == "Motor Speed":
+                entry.bind("<Return>", lambda event, e=entry, l=label_text: self.submit(e, l))
 
             # Tombol OK untuk kirim nilai
             btn = tk.Button(input_frame, text="OK", font=("Segoe UI", 11, "bold"),
@@ -135,7 +140,7 @@ class MonitorApp:
         self.tracking_canvas = tk.Canvas(tracking_frame, width=200, height=200, bg="#fff", highlightthickness=1, highlightbackground="#0078D7")
         self.tracking_canvas.pack(pady=10)
         # Titik awal di tengah
-        self.circle_radius = 15
+        self.circle_radius = 9
         self.circle_x = 100
         self.circle_y = 100
         self.tracking_circle = self.tracking_canvas.create_oval(
@@ -188,8 +193,8 @@ class MonitorApp:
 
     def update_move_speed(self):
         pwm = self.get_pwm_value()
-        # Skala kecepatan: minimal 2, maksimal 25 (bisa disesuaikan)
-        self.move_speed = max(2, int(pwm / 10))
+        # Skala kecepatan: minimal 2, maksimal 10 (lebih realistis di canvas)
+        self.move_speed = max(2, min(10, int(pwm / 25)))
 
     def update_sensor_value(self, index, value):
         # Update progress bar dan label sensor sesuai nilai
@@ -245,6 +250,7 @@ class MonitorApp:
         self.send_motor_command(0, "S")
         self.status_var.set("Status: Diam")
         self.moving_direction = None  # Hentikan gerak lingkaran
+        self.last_action = None
         if self.move_job:
             self.root.after_cancel(self.move_job)
             self.move_job = None
@@ -254,6 +260,7 @@ class MonitorApp:
         self.send_motor_command(pwm, "F")
         self.status_var.set("Status: Maju")
         self.moving_direction = "up"
+        self.last_action = "F"
         if self.move_job:
             self.root.after_cancel(self.move_job)
         self.move_tracking_circle_continuous()
@@ -263,6 +270,7 @@ class MonitorApp:
         self.send_motor_command(pwm, "B")
         self.status_var.set("Status: Mundur")
         self.moving_direction = "down"
+        self.last_action = "B"
         if self.move_job:
             self.root.after_cancel(self.move_job)
         self.move_tracking_circle_continuous()
@@ -272,6 +280,7 @@ class MonitorApp:
         self.send_motor_command(pwm, "L")
         self.status_var.set("Status: Kiri")
         self.moving_direction = "left"
+        self.last_action = "L"
         if self.move_job:
             self.root.after_cancel(self.move_job)
         self.move_tracking_circle_continuous()
@@ -281,6 +290,7 @@ class MonitorApp:
         self.send_motor_command(pwm, "R")
         self.status_var.set("Status: Kanan")
         self.moving_direction = "right"
+        self.last_action = "R"
         if self.move_job:
             self.root.after_cancel(self.move_job)
         self.move_tracking_circle_continuous()
@@ -290,12 +300,23 @@ class MonitorApp:
         if label == "Motor Speed":
             # Validasi dan kirim perintah motor speed manual
             if val.isdigit() and 0 <= int(val) <= 255:
+                pwm_val = int(val)
                 if self.serial_conn and self.serial_conn.is_open:
                     try:
-                        self.serial_conn.write(f"M:{val}:F\n".encode())
+                        # Jika sedang berjalan, kirim ulang perintah dengan aksi terakhir
+                        if self.moving_direction and self.last_action:
+                            self.send_motor_command(pwm_val, self.last_action)
+                        else:
+                            self.serial_conn.write(f"M:{val}:F\n".encode())
                         messagebox.showinfo("Sukses", f"Perintah motor speed {val} terkirim!")
                     except serial.SerialException:
                         messagebox.showerror("Error", "Gagal mengirim data ke perangkat Serial.")
+                # Jika sedang berjalan, update kecepatan lingkaran
+                if self.moving_direction:
+                    self.update_move_speed()
+                # Jika PWM 0, hentikan gerak lingkaran dan status
+                if pwm_val == 0:
+                    self.stop_motor()
             else:
                 messagebox.showwarning("Input Error", "Input Motor Speed harus angka antara 0 sampai 255.")
         elif label == "Servo Angle":

@@ -27,6 +27,10 @@ const char delimiter[] = ":";
 int motor, servo;
 int sensor1, sensor2, sensor3, sensor4, sensor5;
 
+// Variabel untuk tracking aksi dan PWM terakhir
+String lastAction = "";
+int lastPwm = -1;
+
 void setup() {
   Serial.begin(115200);
 
@@ -59,27 +63,52 @@ void loop() {
       char buff_motor_array[buff_motor.length() + 1];
       buff_motor.toCharArray(buff_motor_array, sizeof(buff_motor_array));
       char *token = strtok(buff_motor_array, delimiter);
+      int newPwm = -1;
+      String newAction = "";
       if (token != NULL) {
         token = strtok(NULL, delimiter);
         if (token != NULL) {
-          motor = atoi(token); // Ambil nilai motor dari string
+          newPwm = atoi(token); // Ambil nilai motor dari string
         }
       }
       char *action = strtok(NULL, delimiter); // Ambil aksi motor
       if (action != NULL) {
-        if (action[0] == 'F') {
-          forward(motor);
-        } else if (action[0] == 'B') {
-          backward(motor);
-        } else if (action[0] == 'L') {
-          turnLeft(motor);
-        } else if (action[0] == 'R') {
-          turnRight(motor);
-        } else if (action[0] == 'S') {
+        newAction = String(action[0]);
+      } else {
+        newAction = "F";
+      }
+
+      // Jika aksi berubah atau PWM berubah, update motor
+      if (newAction != lastAction || newPwm != lastPwm) {
+        if (newAction == "F") {
+          forward(newPwm);
+        } else if (newAction == "B") {
+          backward(newPwm);
+        } else if (newAction == "L") {
+          turnLeft(newPwm);
+        } else if (newAction == "R") {
+          turnRight(newPwm);
+        } else if (newAction == "S") {
           stopMotors();
         }
-      } else {
-        forward(motor);
+        lastAction = newAction;
+        lastPwm = newPwm;
+      } else if (newAction == lastAction && newPwm != lastPwm) {
+        // Jika hanya PWM berubah, update PWM saja tanpa ubah arah
+        if (newAction == "F") {
+          analogWrite(ENA, newPwm);
+          analogWrite(ENB, newPwm);
+        } else if (newAction == "B") {
+          analogWrite(ENA, newPwm);
+          analogWrite(ENB, newPwm);
+        } else if (newAction == "L") {
+          analogWrite(ENA, newPwm);
+          analogWrite(ENB, 0);
+        } else if (newAction == "R") {
+          analogWrite(ENA, 0);
+          analogWrite(ENB, newPwm);
+        }
+        lastPwm = newPwm;
       }
     }
     else if (buff[0] == 'S') { // Jika data adalah perintah servo
