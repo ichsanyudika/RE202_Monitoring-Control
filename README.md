@@ -44,7 +44,7 @@ Proyek ini merupakan tugas dari mata kuliah RE-202 Pemrograman Berorientasi Obje
 
 ## 🪟 Tampilan GUI
 
-![](asset/front-end-gui.png)  
+![](asset/gui.png)  
 
 ## 🧑‍💻 Tim Pengembang
 
