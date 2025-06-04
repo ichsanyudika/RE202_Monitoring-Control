@@ -1,4 +1,4 @@
-## 📡 Monitoring & Control GUI Robot Wireless
+# 📡 Monitoring & Control GUI Robot Wireless
 
 Proyek ini merupakan tugas dari mata kuliah RE-202 Pemrograman Berorientasi Objek (OOP) yang bertujuan membangun sistem monitoring dan kontrol robot berbasis GUI menggunakan Python (Tkinter) yang terhubung secara wireless dengan mikrokontroler. GUI ini dapat mengontrol kecepatan motor, sudut servo, arah gerak robot, serta memonitor status sensor garis secara real-time.
 
