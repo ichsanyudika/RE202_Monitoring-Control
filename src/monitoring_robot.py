@@ -504,7 +504,7 @@ class MonitorApp:
         except ValueError:
             messagebox.showwarning("Input Error", "Input must be a number.")
 
-if _name_ == "_main_":
+if __name__ == "_main_":
     root = tk.Tk()
     app = MonitorApp(root)
-    root.mainloop()
+    root.mainloop()
