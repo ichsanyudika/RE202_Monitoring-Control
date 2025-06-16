@@ -6,33 +6,35 @@ Proyek ini merupakan tugas dari mata kuliah RE-202 Pemrograman Berorientasi Obje
 
 Hardware:
 
-- ESP32 Dev Board
+- ESP32 Dev Board.
 
-- Motor DC (2)
+- Motor DC (2).
 
-- Motor Driver (L298N)
+- Motor Driver (L298N).
 
-- Line Sensor BFD 5 Channel
+- Line Sensor BFD 5 Channel.
 
-- Power Supply
+- Micro Servo Mg90-s.
+
+- Power Supply.
 
 Software:
 
-- Python 3.x + Tkinter + socket + threading
+- Python 3.x + Tkinter + socket + threading.
 
-- Arduino IDE + Library WiFiManager ESP32
+- Arduino IDE + Library WiFiManager ESP32.
 
-- ESP32 sebagai server TCP/IP
+- ESP32 sebagai server TCP/IP.
 
 ## Cara Kerja
 
 - ESP32 membuka mode AP + portal konfigurasi (WiFiManager)
 
-- ESP32 menerima perintah dari GUI (misal: M:120,130) untuk atur kecepatan motor
+- ESP32 menerima perintah dari GUI (misal: M:120,130) untuk atur kecepatan motor, dan begitu juga untuk mengatur sudut derajat pada servo.
 
-- ESP32 membaca line sensor, lalu mengirim statusnya ke GUI
+- ESP32 membaca line sensor, lalu mengirim statusnya ke GUI.
 
-- GUI Python menampilkan slider motor, tombol arah, dan visualisasi sensor garis
+- GUI Python menampilkan slider motor, tombol arah, dan visualisasi sensor garis.
 
 ## GUI
 
