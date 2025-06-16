@@ -1,14 +1,14 @@
 # Monitoring & Control GUI Robot Wireless
 
-Proyek ini merupakan tugas dari mata kuliah RE-202 Pemrograman Berorientasi Objek (OOP) yang bertujuan membangun sistem monitoring dan kontrol robot secara wireless melalui GUI Python (Tkinter) yang terhubung ke ESP32 melalui jaringan WiFi.
+This project is an assignment from the RE-202 Object-Oriented Programming (OOP) course which aims to build a wireless robot monitoring and control system via Python GUI (Tkinter) connected to ESP32 via WiFi network.
 
-## Fitur Utama
+## Features
 
 Hardware:
 
 - ESP32 Dev Board.
 
-- Motor DC (2).
+- DC Motor (2).
 
 - Motor Driver (L298N).
 
@@ -22,25 +22,25 @@ Software:
 
 - Python 3.x + Tkinter + socket + threading.
 
-- Arduino IDE + Library WiFiManager ESP32.
+- Arduino IDE + ESP32 WiFiManager Library.
 
-- ESP32 sebagai server TCP/IP.
+- ESP32 as TCP/IP server.
 
-## Cara Kerja
+## Works
 
-- ESP32 membuka mode AP + portal konfigurasi (WiFiManager)
+- ESP32 opens AP mode + configuration portal (WiFiManager)
 
-- ESP32 menerima perintah dari GUI (misal: M:120,130) untuk atur kecepatan motor, dan begitu juga untuk mengatur sudut derajat pada servo.
+- ESP32 receives commands from GUI (eg: M:120,130) to set motor speed, and also to set degree angle on servo.
 
-- ESP32 membaca line sensor, lalu mengirim statusnya ke GUI.
+- ESP32 reads line sensor, then sends its status to GUI.
 
-- GUI Python menampilkan slider motor, tombol arah, dan visualisasi sensor garis.
+- Python GUI displays motor slider, direction button, and line sensor visualization.
 
 ## GUI
 
-![](asset/gui.png)  
+![](asset/gui.png)
 
-## Tim Pengembang
+## Team
 
 - Ichsan Fajar Yudika (4222401042)
 - Wildan Mahfudh Khoirul Murtadho (4222401046)
