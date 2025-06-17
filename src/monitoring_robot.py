@@ -29,8 +29,8 @@ FONT_ENTRY = ("Segoe UI", 12)
 FONT_BUTTON = ("Segoe UI", 12, "bold")
 
 class ModernButton(tk.Button):
-    def _init_(self, master=None, **kw):
-        super()._init_(master, **kw)
+    def __init__(self, master=None, **kw):
+        super().__init__(master, **kw)
         self["bg"] = PALETTE["button"]
         self["fg"] = PALETTE["button_text"]
         self["activebackground"] = PALETTE["button_hover"]
@@ -47,8 +47,8 @@ class ModernButton(tk.Button):
         self["bg"] = PALETTE["button"]
 
 class ModernEntry(tk.Entry):
-    def _init_(self, master=None, **kw):
-        super()._init_(master, **kw)
+    def __init__(self, master=None, **kw):
+        super().__init__(master, **kw)
         self["bg"] = PALETTE["entry_bg"]
         self["fg"] = PALETTE["text"]
         self["font"] = FONT_ENTRY
@@ -59,7 +59,7 @@ class ModernEntry(tk.Entry):
         self["highlightcolor"] = PALETTE["accent"]
 
 class MonitorApp:
-    def _init_(self, root):
+    def __init__(self, root):
         self.root = root
         self.root.title("Monitor System (TCP/IP)")
         self.root.geometry("950x560")
@@ -504,7 +504,7 @@ class MonitorApp:
         except ValueError:
             messagebox.showwarning("Input Error", "Input must be a number.")
 
-if __name__ == "_main_":
+if __name__ == "__main__":
     root = tk.Tk()
     app = MonitorApp(root)
     root.mainloop()
