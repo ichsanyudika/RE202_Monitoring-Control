@@ -8,7 +8,7 @@ Hardware:
 
 - ESP32 Dev Board.
 
-- DC Motor (2).
+- DC Motor (2). 
 
 - Motor Driver (L298N).
 
