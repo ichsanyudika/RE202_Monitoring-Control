@@ -18,7 +18,7 @@
 #define S4 32
 #define S5 25
 
-#define SERVO_PIN 2
+#define SERVO_PIN 23
 
 Servo myServo;
 
@@ -136,13 +136,28 @@ void loop() {
           char buff_array[buff.length() + 1];
           buff.toCharArray(buff_array, sizeof(buff_array));
           
-          char *token = strtok(buff_array, delimiter); 
+          char *token = strtok(buff_array, delimiter); // token "S"
           if (token != NULL) {
-            token = strtok(NULL, delimiter); 
+            token = strtok(NULL, delimiter); // token angle
             if (token != NULL) {
               servo_angle_val = atoi(token); 
-              myServo.write(servo_angle_val);
-              Serial.print("Servo set to: "); Serial.println(servo_angle_val);
+              if (servo_angle_val >= 0 && servo_angle_val <= 180) {
+                myServo.write(servo_angle_val);
+                Serial.print("Servo set to: "); Serial.println(servo_angle_val);
+                if (client && client.connected()) {
+                  client.println("SERVO_OK:" + String(servo_angle_val));
+                }
+              } else {
+                Serial.println("Servo angle out of range (0-180)");
+                if (client && client.connected()) {
+                  client.println("SERVO_FAIL:OUT_OF_RANGE");
+                }
+              }
+            } else {
+              Serial.println("Servo command missing angle!");
+              if (client && client.connected()) {
+                client.println("SERVO_FAIL:NO_ANGLE");
+              }
             }
           }
         } 
@@ -181,8 +196,8 @@ void forward(int speed_val) {
   digitalWrite(M2, LOW);
   digitalWrite(M3, HIGH); 
   digitalWrite(M4, LOW);
-  analogWrite(ENA, speed_val);
-  analogWrite(ENB, speed_val);
+  ledcWrite(0, speed_val); // ENA on channel 0
+  ledcWrite(1, speed_val); // ENB on channel 1
   Serial.print("Motor: Forward, Speed: "); Serial.println(speed_val);
 }
 
@@ -192,8 +207,8 @@ void backward(int speed_val) {
   digitalWrite(M2, HIGH);
   digitalWrite(M3, LOW);  
   digitalWrite(M4, HIGH);
-  analogWrite(ENA, speed_val);
-  analogWrite(ENB, speed_val);
+  ledcWrite(0, speed_val);
+  ledcWrite(1, speed_val);
   Serial.print("Motor: Backward, Speed: "); Serial.println(speed_val);
 }
 
@@ -203,8 +218,8 @@ void turnLeft(int speed_val) {
   digitalWrite(M2, HIGH);
   digitalWrite(M3, HIGH);  // right forward
   digitalWrite(M4, LOW);
-  analogWrite(ENA, speed_val);
-  analogWrite(ENB, speed_val);
+  ledcWrite(0, speed_val);
+  ledcWrite(1, speed_val);
   Serial.print("Motor: Turn Left, Speed: "); Serial.println(speed_val);
 }
 
@@ -214,17 +229,17 @@ void turnRight(int speed_val) {
   digitalWrite(M2, LOW);
   digitalWrite(M3, LOW);   // right backward
   digitalWrite(M4, HIGH);
-  analogWrite(ENA, speed_val);
-  analogWrite(ENB, speed_val);
+  ledcWrite(0, speed_val);
+  ledcWrite(1, speed_val);
   Serial.print("Motor: Turn Right, Speed: "); Serial.println(speed_val);
 }
 
 void stopMotors() {
-  analogWrite(ENA, 0); // Important: Stop motors
-  analogWrite(ENB, 0); // Important: Stop motors
+  ledcWrite(0, 0); // ENA channel 0
+  ledcWrite(1, 0); // ENB channel 1
   digitalWrite(M1, LOW);
   digitalWrite(M2, LOW);
   digitalWrite(M3, LOW);
   digitalWrite(M4, LOW);
-  Serial.println("Motor: Stopped");
+  Serial.println("Motor: Stopped");
 }
