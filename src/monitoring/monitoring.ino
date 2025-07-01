@@ -56,6 +56,8 @@ void setup() {
 
   // WiFiManager for easy WiFi config
   WiFiManager wm;
+  
+  //wm.resetSettings();
   bool res = wm.autoConnect("AutoConnectAP","password"); // Portal if not connected
 
   if (!res) {
@@ -192,10 +194,10 @@ void sensor() {
 // Motor control functions (PWM)
 void forward(int speed_val) {
   // Left forward, right forward
-  digitalWrite(M1, HIGH); 
-  digitalWrite(M2, LOW);
-  digitalWrite(M3, HIGH); 
-  digitalWrite(M4, LOW);
+  digitalWrite(M1, LOW); 
+  digitalWrite(M2, HIGH);
+  digitalWrite(M3, LOW); 
+  digitalWrite(M4, HIGH);
   ledcWrite(0, speed_val); // ENA on channel 0
   ledcWrite(1, speed_val); // ENB on channel 1
   Serial.print("Motor: Forward, Speed: "); Serial.println(speed_val);
@@ -203,10 +205,10 @@ void forward(int speed_val) {
 
 void backward(int speed_val) {
   // Left backward, right backward
-  digitalWrite(M1, LOW);  
-  digitalWrite(M2, HIGH);
-  digitalWrite(M3, LOW);  
-  digitalWrite(M4, HIGH);
+  digitalWrite(M1, HIGH);  
+  digitalWrite(M2, LOW);
+  digitalWrite(M3, HIGH);  
+  digitalWrite(M4, LOW);
   ledcWrite(0, speed_val);
   ledcWrite(1, speed_val);
   Serial.print("Motor: Backward, Speed: "); Serial.println(speed_val);
